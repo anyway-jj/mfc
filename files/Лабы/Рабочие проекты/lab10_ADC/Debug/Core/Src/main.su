@@ -1,0 +1,7 @@
+../Core/Src/main.c:66:5:main	8	static
+../Core/Src/main.c:144:6:SystemClock_Config	88	static
+../Core/Src/main.c:182:6:send_ascii_code	16	static
+../Core/Src/main.c:186:6:send_title_Ux_Uy	8	static
+../Core/Src/main.c:196:6:send_temp_value	8	static
+../Core/Src/main.c:206:6:send_voltage	16	static
+../Core/Src/main.c:222:6:Error_Handler	4	static,ignoring_inline_asm

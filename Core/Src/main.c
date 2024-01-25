@@ -41,9 +41,7 @@
 
 /* Private variables ---------------------------------------------------------*/
 
-/* USER CODE BEGIN PV */
-
-/* USER CODE END PV */
+uint8_t flag = 0;
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
@@ -86,21 +84,30 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
 
-  RCC -> AHB1ENR |= RCC_AHB1ENR_GPIOCEN;
-  GPIOC -> MODER |= (0b01 << GPIO_MODER_MODER13_Pos);
+  RCC -> AHB1ENR |= RCC_AHB1ENR_GPIOCEN | RCC_AHB1ENR_GPIOAEN;
+  GPIOC -> MODER |= 0b01 << GPIO_MODER_MODER13_Pos;
+  /*GPIOA -> MODER |= (0b00 << GPIO_MODER_MODER0_Pos);*/
+  GPIOA -> PUPDR |= 0b01 << GPIO_PUPDR_PUPD0_Pos;
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  GPIOC -> BSRR |= GPIO_BSRR_BR13;
-	  HAL_Delay(1000);
-	  GPIOC -> BSRR |= GPIO_BSRR_BS13;
-	  HAL_Delay(3000);
-
+	  if ( (GPIOA->IDR & GPIO_IDR_ID0_Msk) == 0) {
+	  	  if (flag == 0) {
+	  	  	flag = 1;
+	  	  	GPIOC->BSRR |= GPIO_BSRR_BS13;
+	  	  } else {
+	  	  	flag = 0;
+	  	  	GPIOC->BSRR |= GPIO_BSRR_BR13;
+	  	  }
+	  	  for (int i = 0; i < 250000; i++);
+	  	  while ( ( (GPIOA->IDR & GPIO_IDR_ID0_Msk) == 0) );
+	  	}
   }
-  /* USER CODE END 3 */
 }
+  /* USER CODE END 3 */
+
 
 /**
   * @brief System Clock Configuration
