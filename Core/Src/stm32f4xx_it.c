@@ -41,7 +41,7 @@
 
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN PV */
-
+uint8_t flag = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -199,5 +199,18 @@ void SysTick_Handler(void)
 /******************************************************************************/
 
 /* USER CODE BEGIN 1 */
-
+void EXTI0_IRQHandler(void){
+	if (flag == 0)
+	{
+		flag = 1;
+		GPIOC->BSRR |= GPIO_BSRR_BS13;
+	}
+	else
+	{
+		flag = 0;
+		GPIOC->BSRR |= GPIO_BSRR_BR13;
+	}
+	for (int i = 0; i < 250000; i++);
+	EXTI->PR |= EXTI_PR_PR0;
+}
 /* USER CODE END 1 */

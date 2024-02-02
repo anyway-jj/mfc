@@ -18,6 +18,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include <stdio.h>
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -41,7 +42,6 @@
 
 /* Private variables ---------------------------------------------------------*/
 
-uint8_t flag = 0;
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
@@ -88,22 +88,15 @@ int main(void)
   GPIOC -> MODER |= 0b01 << GPIO_MODER_MODER13_Pos;
   /*GPIOA -> MODER |= (0b00 << GPIO_MODER_MODER0_Pos);*/
   GPIOA -> PUPDR |= 0b01 << GPIO_PUPDR_PUPD0_Pos;
-
+  SYSCFG->EXTICR[0] |= 0b0000 << SYSCFG_EXTICR1_EXTI0_Pos;
+  EXTI -> FTSR |= EXTI_FTSR_TR0;
+  EXTI->IMR |= EXTI_IMR_MR0;
+  NVIC->ISER[0] |= 1 << 6;
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  if ( (GPIOA->IDR & GPIO_IDR_ID0_Msk) == 0) {
-	  	  if (flag == 0) {
-	  	  	flag = 1;
-	  	  	GPIOC->BSRR |= GPIO_BSRR_BS13;
-	  	  } else {
-	  	  	flag = 0;
-	  	  	GPIOC->BSRR |= GPIO_BSRR_BR13;
-	  	  }
-	  	  for (int i = 0; i < 250000; i++);
-	  	  while ( ( (GPIOA->IDR & GPIO_IDR_ID0_Msk) == 0) );
-	  	}
+
   }
 }
   /* USER CODE END 3 */
