@@ -199,6 +199,20 @@ void SysTick_Handler(void)
 /******************************************************************************/
 
 /* USER CODE BEGIN 1 */
+
+void TIM2_IRQHandler(void){
+	if (flag == 0) {
+		flag = 1;
+		GPIOC -> BSRR |= GPIO_BSRR_BR13;
+	} else {
+		flag = 0;
+		GPIOC -> BSRR |= GPIO_BSRR_BS13;
+	}
+	TIM2 -> SR &= ~TIM_SR_CC1IF_Msk;
+}
+
+
+/*
 void EXTI0_IRQHandler(void){
 	if (flag == 0)
 	{
@@ -212,5 +226,5 @@ void EXTI0_IRQHandler(void){
 	}
 	for (int i = 0; i < 250000; i++);
 	EXTI->PR |= EXTI_PR_PR0;
-}
+} */
 /* USER CODE END 1 */
